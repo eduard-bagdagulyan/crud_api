@@ -1,6 +1,6 @@
 import { AppFactory } from './app'
 
-async function bootstrap(): Promise<void> {
+function bootstrap() {
     const app = new AppFactory().create()
 
     app.listen(8999) // TODO change to env var
