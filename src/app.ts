@@ -13,27 +13,22 @@ export class AppFactory {
     }
 
     create() {
-        this.server = http.createServer(
-            async (req, res) => {
-                const result = await this.handleRequest(req)
+        this.server = http.createServer(async (req, res) => {
+            const result = await this.handleRequest(req)
 
-                res.writeHead(result?.status || 200, {
-                    'Content-Type': 'application/json',
-                })
-                res.write(JSON.stringify(result))
-                res.end()
-            }
-        )
+            res.writeHead(result?.status || 200, {
+                'Content-Type': 'application/json',
+            })
+            res.write(JSON.stringify(result))
+            res.end()
+        })
 
         return this.server
     }
 
     handleRequest(req) {
         try {
-            const { query, pathname } = url.parse(
-                req.url,
-                true
-            )
+            const { query, pathname } = url.parse(req.url, true)
 
             if (
                 pathname === '/users' &&
@@ -46,16 +41,18 @@ export class AppFactory {
                 req.method === 'GET' &&
                 query?.userId
             ) {
-                return this.usersController.getUserById(
-                    query.userId
-                )
+                return this.usersController.getUserById(query.userId)
+            } else {
+                return {
+                    status: HttpStatus.NOT_FOUND,
+                    data: null,
+                    error: ResponseMessages.NOT_FOUND,
+                }
             }
         } catch (e) {
             return {
                 status: HttpStatus.INTERNAL_SERVER_ERROR,
-                error:
-                    e?.message ||
-                    ResponseMessages.INTERNAL_ERROR,
+                error: e?.message || ResponseMessages.INTERNAL_ERROR,
                 data: null,
             }
         }
