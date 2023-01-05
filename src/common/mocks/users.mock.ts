@@ -1,3 +1,3 @@
-import { IUser } from '../interfaces/user'
+import { User } from '../interfaces/user'
 
-export const users: Array<IUser> = []
+export const users: Array<User> = []

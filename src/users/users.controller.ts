@@ -1,6 +1,6 @@
 import { UsersService } from './users.service'
 import { APICommonResponse } from '../common/interfaces/api-common-response'
-import { IUser } from '../common/interfaces/user'
+import { User } from '../common/interfaces/user'
 import { HttpStatus } from '../common/enums/http-status.enum'
 import * as uuid from 'uuid'
 
@@ -11,8 +11,8 @@ export class UsersController {
         this.usersService = new UsersService()
     }
 
-    async getUsers(): Promise<APICommonResponse<IUser[]>> {
-        let result: APICommonResponse<IUser[]>
+    async getUsers(): Promise<APICommonResponse<User[]>> {
+        let result: APICommonResponse<User[]>
 
         const users = await this.usersService.getUsers()
 
@@ -25,8 +25,8 @@ export class UsersController {
         return result
     }
 
-    async getUserById(id): Promise<APICommonResponse<IUser>> {
-        let result: APICommonResponse<IUser>
+    async getUserById(id): Promise<APICommonResponse<User>> {
+        let result: APICommonResponse<User>
 
         if (!uuid.validate(id)) {
             result = {
@@ -49,6 +49,35 @@ export class UsersController {
                     data: null,
                     error: 'user not found',
                 }
+            }
+        }
+
+        return result
+    }
+
+    async createNewUser(body) {
+        let result: APICommonResponse<User>
+
+        if (
+            !body.username ||
+            !body.age ||
+            !Number.isInteger(body.age) ||
+            !body.hobbies.length
+        ) {
+            result = {
+                status: HttpStatus.BAD_REQUEST,
+                data: null,
+                error: 'wrong params supplied',
+            }
+        } else {
+            const id = uuid.v4()
+
+            const user = await this.usersService.createNewUser({ id, ...body })
+
+            result = {
+                status: HttpStatus.OK,
+                data: user,
+                error: null,
             }
         }
 
