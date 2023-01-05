@@ -59,10 +59,10 @@ export class UsersController {
         let result: APICommonResponse<User>
 
         if (
-            !body.username ||
-            !body.age ||
-            !Number.isInteger(body.age) ||
-            !body.hobbies.length
+            !body?.username ||
+            !body?.age ||
+            !Number.isInteger(body?.age) ||
+            !body?.hobbies.length
         ) {
             result = {
                 status: HttpStatus.BAD_REQUEST,
