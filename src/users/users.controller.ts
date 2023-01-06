@@ -73,7 +73,7 @@ export class UsersController {
             const user = await this.usersService.createNewUser(body)
 
             result = {
-                status: HttpStatus.OK,
+                status: HttpStatus.CREATED,
                 data: user,
                 error: null,
             }
