@@ -1,5 +1,6 @@
 # compiled output
 dist/*
+build/*
 logs/*
 !/dist/v4
 !/dist/v5
