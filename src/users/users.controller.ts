@@ -83,4 +83,26 @@ export class UsersController {
 
         return result
     }
+
+    async deleteUser(id) {
+        let result: APICommonResponse<{ deleted: boolean }>
+
+        if (!id || !uuid.validate(id)) {
+            result = {
+                status: HttpStatus.BAD_REQUEST,
+                data: null,
+                error: 'wrong params supplied',
+            }
+        } else {
+            const isDeleted = await this.usersService.deleteUser(id)
+
+            result = {
+                status: HttpStatus.OK,
+                data: isDeleted,
+                error: null,
+            }
+        }
+
+        return result
+    }
 }

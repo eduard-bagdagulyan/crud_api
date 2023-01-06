@@ -44,6 +44,8 @@ export class AppFactory {
                     case 'POST':
                         const body = await parseBody(req)
                         return this.usersController.createNewUser(body)
+                    case 'DELETE':
+                        return this.usersController.deleteUser(query?.userId)
                     default:
                         return {
                             status: HttpStatus.NOT_FOUND,

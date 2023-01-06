@@ -16,4 +16,13 @@ export class UsersService {
 
         return user
     }
+
+    async deleteUser(id): Promise<{ deleted: boolean }> {
+        users.splice(
+            users.findIndex(user => user.id === id),
+            1
+        )
+
+        return { deleted: true }
+    }
 }
