@@ -70,13 +70,33 @@ export class UsersController {
                 error: 'wrong params supplied',
             }
         } else {
-            const id = uuid.v4()
-
-            const user = await this.usersService.createNewUser({ id, ...body })
+            const user = await this.usersService.createNewUser(body)
 
             result = {
                 status: HttpStatus.OK,
                 data: user,
+                error: null,
+            }
+        }
+
+        return result
+    }
+
+    async updateUser(id, body) {
+        let result: APICommonResponse<User>
+
+        if (!uuid.validate(id)) {
+            result = {
+                status: HttpStatus.BAD_REQUEST,
+                data: null,
+                error: `property 'userId' must be of type uuid, received ${typeof id}`,
+            }
+        } else {
+            const updatedUser = await this.usersService.updateUser(id, body)
+
+            result = {
+                status: HttpStatus.OK,
+                data: updatedUser,
                 error: null,
             }
         }

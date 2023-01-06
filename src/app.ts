@@ -29,6 +29,7 @@ export class AppFactory {
 
     async handleRequest(req) {
         try {
+            let body
             const { query, pathname } = url.parse(req.url, true)
 
             if (pathname === '/api/users') {
@@ -42,8 +43,14 @@ export class AppFactory {
                             )
                         }
                     case 'POST':
-                        const body = await parseBody(req)
+                        body = await parseBody(req)
                         return this.usersController.createNewUser(body)
+                    case 'PUT':
+                        body = await parseBody(req)
+                        return this.usersController.updateUser(
+                            query?.userId,
+                            body
+                        )
                     case 'DELETE':
                         return this.usersController.deleteUser(query?.userId)
                     default:

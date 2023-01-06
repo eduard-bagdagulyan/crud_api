@@ -1,5 +1,7 @@
 import { User } from '../common/interfaces/user'
 import { users } from '../common/mocks/users.mock'
+import * as uuid from 'uuid'
+import { HttpStatus } from '../common/enums/http-status.enum'
 
 export class UsersService {
     async getUsers(): Promise<User[]> {
@@ -11,10 +13,29 @@ export class UsersService {
     }
 
     async createNewUser(body: User): Promise<User> {
-        const user = new User(body.id, body.username, body.age, body.hobbies)
+        const id = uuid.v4()
+
+        const user = new User(id, body.username, body.age, body.hobbies)
         users.push(user)
 
         return user
+    }
+
+    async updateUser(id, body) {
+        const userIndex = users.findIndex(user => user.id === id)
+
+        if (userIndex === -1) {
+            return {
+                status: HttpStatus.NOT_FOUND,
+                data: null,
+                error: 'user not found',
+            }
+        }
+
+        const newUser = { ...users[userIndex], ...body }
+        users[userIndex] = newUser
+
+        return newUser
     }
 
     async deleteUser(id): Promise<{ deleted: boolean }> {
