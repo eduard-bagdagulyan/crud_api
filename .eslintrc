@@ -18,7 +18,8 @@
   },
   "ignorePatterns": [
     ".eslintrc.js",
-    "webpack.config.js"
+    "webpack.config.js",
+    "tests"
   ],
   "rules": {
     "@typescript-eslint/interface-name-prefix": "off",

@@ -37,6 +37,5 @@ logs/*
 /.idea
 >>>>>>> da0c19d35849224bf9f688110088fdbe5362e464
 
-# Cypress
-cypress/screenshots
-cypress.env.json
+# Jest
+coverage
