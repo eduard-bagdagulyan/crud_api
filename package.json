@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "start:dev": "nodemon --watch './**/*.ts' --exec ts-node src/main.ts",
-    "start:prod": "webpack && node build/bundle.js"
+    "start:prod": "webpack && node build/bundle.js",
+    "start:multi": "npm run start:dev -- --multi"
   },
   "keywords": [],
   "author": "",
