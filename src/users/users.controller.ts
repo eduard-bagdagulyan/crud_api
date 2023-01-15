@@ -55,7 +55,7 @@ export class UsersController {
         return result
     }
 
-    async createNewUser(body) {
+    async createNewUser(body): Promise<APICommonResponse<User>> {
         let result: APICommonResponse<User>
 
         if (
@@ -82,7 +82,7 @@ export class UsersController {
         return result
     }
 
-    async updateUser(id, body) {
+    async updateUser(id, body): Promise<APICommonResponse<User>> {
         let result: APICommonResponse<User>
 
         if (!uuid.validate(id)) {
@@ -94,17 +94,25 @@ export class UsersController {
         } else {
             const updatedUser = await this.usersService.updateUser(id, body)
 
-            result = {
-                status: HttpStatus.OK,
-                data: updatedUser,
-                error: null,
+            if (!updatedUser) {
+                result = {
+                    status: HttpStatus.NOT_FOUND,
+                    data: null,
+                    error: 'user not found',
+                }
+            } else {
+                result = {
+                    status: HttpStatus.OK,
+                    data: updatedUser,
+                    error: null,
+                }
             }
         }
 
         return result
     }
 
-    async deleteUser(id) {
+    async deleteUser(id): Promise<APICommonResponse<{ deleted: boolean }>> {
         let result: APICommonResponse<{ deleted: boolean }>
 
         if (!id || !uuid.validate(id)) {
@@ -116,10 +124,18 @@ export class UsersController {
         } else {
             const isDeleted = await this.usersService.deleteUser(id)
 
-            result = {
-                status: HttpStatus.OK,
-                data: isDeleted,
-                error: null,
+            if (!isDeleted) {
+                result = {
+                    status: HttpStatus.NOT_FOUND,
+                    data: null,
+                    error: 'user not found',
+                }
+            } else {
+                result = {
+                    status: HttpStatus.NO_CONTENT,
+                    data: isDeleted,
+                    error: null,
+                }
             }
         }
 

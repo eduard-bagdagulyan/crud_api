@@ -1,6 +1,5 @@
 import { User } from '../common/interfaces/user'
 import * as uuid from 'uuid'
-import { HttpStatus } from '../common/enums/http-status.enum'
 import { Database } from '../database/database'
 
 export class UsersService {
@@ -30,16 +29,12 @@ export class UsersService {
         return user
     }
 
-    async updateUser(id, body) {
+    async updateUser(id, body): Promise<User | null> {
         const users = await this.db.getRecords()
         const userIndex = users.findIndex(user => user.id === id)
 
         if (userIndex === -1) {
-            return {
-                status: HttpStatus.NOT_FOUND,
-                data: null,
-                error: 'user not found',
-            }
+            return null
         }
 
         const newUser = { ...users[userIndex], ...body }
@@ -51,10 +46,13 @@ export class UsersService {
 
     async deleteUser(id): Promise<{ deleted: boolean }> {
         const users = await this.db.getRecords()
-        users.splice(
-            users.findIndex(user => user.id === id),
-            1
-        )
+        const userIndex = users.findIndex(user => user.id === id)
+
+        if (userIndex === -1) {
+            return null
+        }
+
+        users.splice(userIndex, 1)
         await this.db.saveRecords(users)
 
         return { deleted: true }
